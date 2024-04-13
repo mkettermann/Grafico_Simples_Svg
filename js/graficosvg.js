@@ -6,12 +6,12 @@ const pieChart = (options) => {
 	chart.setAttribute("width", width);
 	chart.setAttribute("height", height);
 	chart.setAttribute("viewBox", `0 0 ${width} ${height}`);
-	chart.setAttribute("font-family", "sans-serif");
-	chart.setAttribute("font-size", "18");
 
 	let labels = Object.keys(data);
 	let values = Object.values(data);
 	let total = values.reduce((x, y) => x + y);
+	let circle = document.createElementNS(svg, "g");
+	circle.setAttribute("style", `outline: 5px solid black;	border-radius: 50%; outline-offset: -4px;`);
 
 	let angles = [0];
 	values.forEach((x, i) => angles.push(angles[i] + x / total * 2 * Math.PI));
@@ -21,15 +21,23 @@ const pieChart = (options) => {
 		let x2 = cx + r * Math.sin(angles[i + 1]);
 		let y2 = cy - r * Math.cos(angles[i + 1]);
 		let big = (angles[i + 1] - angles[i] > Math.PI) ? 1 : 0;
-		let path = `M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${big} 1${x2},${y2}Z`;
+		let path = `M${cx},${cy}` +
+			`L${x1},${y1}` +
+			`A${r},${r} 0 ${big} 1` +
+			`${x2},${y2}` +
+			`L${cx},${cy}Z`;
 		let color = `hsl(${(i * 40) % 360},${90 - 3 * i}%,${50 + 2 * i}%)`;
 		let slice = document.createElementNS(svg, "path");
 		slice.setAttribute("d", path);
 		slice.setAttribute("fill", color);
-		slice.setAttribute("stroke", "black");
-		slice.setAttribute("stroke-width", "2");
+		slice.setAttribute("stroke", "white");
+		slice.setAttribute("stroke-width", "1px");
 
-		chart.append(slice);
+
+
+
+		circle.append(slice);
+		chart.append(circle);
 	});
 
 
@@ -37,7 +45,7 @@ const pieChart = (options) => {
 }
 
 document.querySelector("#chart").append(pieChart({
-	width: 640, height: 400,
+	width: 400, height: 400,
 	cx: 200, cy: 200, r: 180,
 	lx: 400, ly: 10,
 	data: {
