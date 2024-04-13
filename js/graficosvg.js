@@ -22,7 +22,14 @@ const pieChart = (options) => {
 		let y2 = cy - r * Math.cos(angles[i + 1]);
 		let big = (angles[i + 1] - angles[i] > Math.PI) ? 1 : 0;
 		let path = `M${cx},${cy}L${x1},${y1}A${r},${r} 0 ${big} 1${x2},${y2}Z`;
-		let color =
+		let color = `hsl(${(i * 40) % 360},${90 - 3 * i}%,${50 + 2 * i}%)`;
+		let slice = document.createElementNS(svg, "path");
+		slice.setAttribute("d", path);
+		slice.setAttribute("fill", color);
+		slice.setAttribute("stroke", "black");
+		slice.setAttribute("stroke-width", "2");
+
+		chart.append(slice);
 	});
 
 
