@@ -3,8 +3,6 @@ const pieChart = (options) => {
 	let svg = "http://www.w3.org/2000/svg";
 
 	let chart = document.createElementNS(svg, "svg");
-	chart.setAttribute("width", width);
-	chart.setAttribute("height", height);
 	chart.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
 	let labels = Object.keys(data);
@@ -16,7 +14,6 @@ const pieChart = (options) => {
 
 	let angles = [0];
 	values.forEach((v, i) => angles.push(angles[i] + v / total * 2 * Math.PI));
-	console.log(angles);
 	values.forEach((v, i) => {
 		let x1 = cx + r * Math.sin(angles[i]);
 		let y1 = cy - r * Math.cos(angles[i]);
@@ -49,7 +46,7 @@ const pieChart = (options) => {
 		let texto = document.createElementNS(svg, "text");
 		texto.setAttribute("x", lx + 30);
 		texto.setAttribute("y", ly + 30 * i + 16);
-		texto.append(`${Math.round(v)}   ${labels[i]}`);
+		texto.append(`${Math.round(v / total * 100)}% - ${v} ${labels[i]}`);
 		legenda.append(texto);
 
 	});
