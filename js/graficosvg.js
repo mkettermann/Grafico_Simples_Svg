@@ -11,11 +11,13 @@ const pieChart = (options) => {
 	let values = Object.values(data);
 	let total = values.reduce((x, y) => x + y);
 	let circle = document.createElementNS(svg, "g");
+	let legenda = document.createElementNS(svg, "g");
 	circle.setAttribute("style", `outline: 5px solid black;	border-radius: 50%; outline-offset: -4px;`);
 
 	let angles = [0];
-	values.forEach((x, i) => angles.push(angles[i] + x / total * 2 * Math.PI));
-	values.forEach((values, i) => {
+	values.forEach((v, i) => angles.push(angles[i] + v / total * 2 * Math.PI));
+	console.log(angles);
+	values.forEach((v, i) => {
 		let x1 = cx + r * Math.sin(angles[i]);
 		let y1 = cy - r * Math.cos(angles[i]);
 		let x2 = cx + r * Math.sin(angles[i + 1]);
@@ -32,20 +34,33 @@ const pieChart = (options) => {
 		slice.setAttribute("fill", color);
 		slice.setAttribute("stroke", "white");
 		slice.setAttribute("stroke-width", "1px");
-
-
-
-
 		circle.append(slice);
-		chart.append(circle);
+
+		let refCor = document.createElementNS(svg, "rect");
+		refCor.setAttribute("x", lx);
+		refCor.setAttribute("y", ly + 30 * i);
+		refCor.setAttribute("width", 20);
+		refCor.setAttribute("height", 20);
+		refCor.setAttribute("fill", color);
+		refCor.setAttribute("stroke", "black");
+		refCor.setAttribute("stroke-width", "1");
+		legenda.append(refCor);
+
+		let texto = document.createElementNS(svg, "text");
+		texto.setAttribute("x", lx + 30);
+		texto.setAttribute("y", ly + 30 * i + 16);
+		texto.append(`${Math.round(v)}   ${labels[i]}`);
+		legenda.append(texto);
+
 	});
 
-
+	chart.append(circle);
+	chart.append(legenda);
 	return chart;
 }
 
 document.querySelector("#chart").append(pieChart({
-	width: 400, height: 400,
+	width: 640, height: 400,
 	cx: 200, cy: 200, r: 180,
 	lx: 400, ly: 10,
 	data: {
